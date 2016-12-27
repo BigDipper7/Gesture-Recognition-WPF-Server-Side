@@ -1,0 +1,49 @@
+﻿<Window x:Class="WpfApplicationTest.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="1228" Width="852">
+    <Grid>
+        <Button Content="Open" Height="23" HorizontalAlignment="Left" Margin="729,40,0,0" Name="btnOpen" VerticalAlignment="Top" Width="75" Click="btnOpen_Click" />
+        <Button Content="Close" Height="23" HorizontalAlignment="Left" Margin="729,69,0,0" Name="btnClose" VerticalAlignment="Top" Width="75" Click="btnClose_Click" />
+        <Label Content="Label" Height="28" HorizontalAlignment="Left" Margin="747,6,0,0" Name="labelState" VerticalAlignment="Top" />
+        <Image Name="defaultImg" Stretch="Fill" Width="400" Height="600" Source="/WpfApplicationTest;component/Images/Sky_1280x8001.jpg" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        
+        <Canvas Height="600" HorizontalAlignment="Left" Name="canvas1" VerticalAlignment="Top" Width="400">
+            <Rectangle Height="600" HorizontalAlignment="Left" Name="rectMask" Stroke="Black" VerticalAlignment="Top" Width="400" Fill="Black" Canvas.Left="0" Canvas.Top="0" />
+        </Canvas>
+        
+        <Button Content="Start" Height="23" HorizontalAlignment="Left" Margin="450,258,0,0" Name="button1" VerticalAlignment="Top" Width="75" />
+        <Button Content="Stop" Height="23" HorizontalAlignment="Left" Margin="540,258,0,0" Name="button2" VerticalAlignment="Top" Width="75"  />
+        <Button Content="Pause" Height="23" HorizontalAlignment="Left" Margin="633,258,0,0" Name="button3" VerticalAlignment="Top" Width="75"  />
+        <Button Content="Resume" Height="23" HorizontalAlignment="Left" Margin="729,258,0,0" Name="button4" VerticalAlignment="Top" Width="75"  />
+    </Grid>
+
+    <Window.Resources>
+        <Storyboard x:Key="example" RepeatBehavior="Forever">
+            <DoubleAnimation Storyboard.TargetName="rectMask" 
+          Storyboard.TargetProperty="Width" From="1" To="350" 
+          Duration="0:0:1" BeginTime="0:0:0"/>
+            <DoubleAnimation Storyboard.TargetName="rectMask" 
+          Storyboard.TargetProperty="Height" From="1" To="250" 
+          Duration="0:0:10" BeginTime="0:0:1"/>
+            <DoubleAnimation Storyboard.TargetName="rectMask" 
+          Storyboard.TargetProperty="Height" From="250" To="1" 
+          Duration="0:0:10" BeginTime="0:0:12"/>
+            <DoubleAnimation Storyboard.TargetName="rectMask" 
+          Storyboard.TargetProperty="Width" From="350" To="1" 
+          Duration="0:0:1" BeginTime="0:0:22"/>
+        </Storyboard>
+
+        <Storyboard x:Key="sbopening">
+            <DoubleAnimation Storyboard.TargetName="rectMask" 
+          Storyboard.TargetProperty="Height" From="600" To="0" 
+          Duration="0:0:10" BeginTime="0:0:0"/>
+        </Storyboard>
+        <Storyboard x:Key="sbclosing">
+            <DoubleAnimation Storyboard.TargetName="rectMask" 
+          Storyboard.TargetProperty="Height" From="0" To="600" 
+          Duration="0:0:10" BeginTime="0:0:0"/>
+        </Storyboard>
+    </Window.Resources>
+
+</Window>
