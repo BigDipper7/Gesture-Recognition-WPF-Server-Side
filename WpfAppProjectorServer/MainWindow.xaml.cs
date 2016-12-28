@@ -21,6 +21,8 @@ using Eneter.Messaging.MessagingSystems.TcpMessagingSystem;
 using Eneter.Messaging.MessagingSystems.Composites;
 using Eneter.Messaging.DataProcessing.Serializing;
 
+using Fleck;
+
 
 namespace WpfApplicationTest
 {
@@ -49,7 +51,7 @@ namespace WpfApplicationTest
             InitializeComponent();
 
             refreshStoryBoard();
-            Thread eneterThread = new Thread(new ThreadStart(run));
+            Thread eneterThread = new Thread(new ThreadStart(runWebSocketServer));
             eneterThread.Start();
             
         }
@@ -201,6 +203,41 @@ namespace WpfApplicationTest
         }
 
 
+        public void runWebSocketServer()
+        {
+            var server = new WebSocketServer("ws://0.0.0.0:8090");
+            server.RestartAfterListenError = true;
+            server.Start(socket =>
+            {
+                socket.OnOpen = () =>
+                    {
+                        Console.WriteLine("Open!");
+                    };
+                socket.OnClose = () => 
+                    {
+                        Console.WriteLine("Close!");
+                    };
+                socket.OnMessage = message =>
+                    {
+                        socket.Send("received : " + message);
+                        Console.WriteLine("receive msg..." + message);
+                        
+                        String msg = message;
+                        if (msg.Equals("Open"))
+                        {
+                            Console.WriteLine("Simulate Open Action");
+                            simulateOpenAction();
+                        }
+                        else if (msg.Equals("Close"))
+                        {
+                            Console.WriteLine("Simulate Close Action");
+                            simulateCloseAction();
+                        }
+                    };
+            });
+
+            Console.ReadLine();
+        }
 
 
 
