@@ -282,7 +282,7 @@ namespace WpfApplicationTest
         }
 
 
-        private string GESTURE_BEFORE_INFO = null;
+        //private string GESTURE_BEFORE_INFO = null;
         private void DataReceivedHandler(
                             object sender,
                             SerialDataReceivedEventArgs e)
@@ -292,17 +292,23 @@ namespace WpfApplicationTest
             Console.WriteLine("Data Received:");
             Console.WriteLine(indata);
 
-            if (indata.Equals(GESTURE_OPEN))
+            if (indata.Equals(GESTURE_OPEN) || indata.Equals(GESTURE_OPEN+GESTURE_STOP))
             {
-
+                Console.WriteLine("[GESTURE] Simulate Open Action");
+                simulateOpenAction();
             }
             else if (indata.Equals(GESTURE_STOP))
             {
-
+                Console.WriteLine("data: " + indata);
             }
-            else if (indata.Equals(GESTURE_CLOSE))
+            else if (indata.Equals(GESTURE_CLOSE) || indata.Equals(GESTURE_CLOSE + GESTURE_STOP))
             {
-                
+                Console.WriteLine("[GESTURE] Simulate Close Action");
+                simulateCloseAction();
+            }
+            else
+            {
+                Console.WriteLine("data: " + indata);
             }
         }
 
