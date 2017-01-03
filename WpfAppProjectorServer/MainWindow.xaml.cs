@@ -13,6 +13,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Threading;
+using System.IO.Ports;
 using ServiceExample;
 
 using Eneter.Messaging.EndPoints.TypedMessages;
@@ -46,18 +47,25 @@ namespace WpfApplicationTest
         private Storyboard sbclosing = null;
         private TimeSpan pauseTime;
 
+        private SerialPort mySerialPort = null;
+        private const string GESTURE_CLOSE = "#CLSOING_10000#";
+        private const string GESTURE_OPEN = "#OPENING_10000#";
+        private const string GESTURE_STOP = "STOPPED";
+
         public MainWindow()
         {
             InitializeComponent();
 
-            this.Topmost = true;
-            this.Hide();
-            this.Show();
+            //this.Topmost = true;
+            //this.Hide();
+            //this.Show();
 
             refreshStoryBoard();
             Thread eneterThread = new Thread(new ThreadStart(runWebSocketServer));
             eneterThread.Start();
-            
+
+            Thread portThread = new Thread(new ThreadStart(initSerialPortInfo));
+            portThread.Start();
         }
 
         private void refreshStoryBoard() 
@@ -240,8 +248,66 @@ namespace WpfApplicationTest
                     };
             });
 
+            Console.WriteLine("Press any key to continue...");
+            Console.WriteLine();
             Console.ReadLine();
+
+            mySerialPort.Close();
         }
+
+        public void initSerialPortInfo()
+        {
+            mySerialPort = new SerialPort("COM3");
+
+            mySerialPort.BaudRate = 921600;
+            mySerialPort.Parity = Parity.None;
+            mySerialPort.StopBits = StopBits.One;
+            mySerialPort.DataBits = 8;
+            mySerialPort.Handshake = Handshake.None;
+            mySerialPort.RtsEnable = true;
+
+            mySerialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
+
+            try
+            {
+                mySerialPort.Open();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception e:"+e);
+            }
+            //Console.WriteLine("Press any key to continue...");
+            //Console.WriteLine();
+            //Console.ReadKey();
+        }
+
+
+        private string GESTURE_BEFORE_INFO = null;
+        private void DataReceivedHandler(
+                            object sender,
+                            SerialDataReceivedEventArgs e)
+        {
+            SerialPort sp = (SerialPort)sender;
+            string indata = sp.ReadExisting();
+            Console.WriteLine("Data Received:");
+            Console.WriteLine(indata);
+
+            if (indata.Equals(GESTURE_OPEN))
+            {
+
+            }
+            else if (indata.Equals(GESTURE_STOP))
+            {
+
+            }
+            else if (indata.Equals(GESTURE_CLOSE))
+            {
+                
+            }
+        }
+
+
+
 
 
 
