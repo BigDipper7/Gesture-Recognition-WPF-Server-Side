@@ -6,7 +6,7 @@
         <Button Visibility="Hidden" Content="Open" Height="23" HorizontalAlignment="Left" Margin="729,40,0,0" Name="btnOpen" VerticalAlignment="Top" Width="75" Click="btnOpen_Click" />
         <Button Visibility="Hidden" Content="Close" Height="23" HorizontalAlignment="Left" Margin="729,69,0,0" Name="btnClose" VerticalAlignment="Top" Width="75" Click="btnClose_Click" />
         <Label Visibility="Hidden" Content="Label" Height="28" HorizontalAlignment="Left" Margin="747,6,0,0" Name="labelState" VerticalAlignment="Top" />
-        <Image Name="defaultImg" Stretch="Fill" Width="1280" Height="800" Source="/WpfApplicationTest;component/Images/Sky_1280x8001.jpg" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Image Name="defaultImg" Stretch="Fill" Width="1280" Height="800" HorizontalAlignment="Left" VerticalAlignment="Top" Source="/WpfAppProjectorServer;component/Images/Sky_1280x8001.jpg" />
         
         <Canvas Height="800" HorizontalAlignment="Left" Name="canvas1" VerticalAlignment="Top" Width="1280">
             <Rectangle Height="800" HorizontalAlignment="Left" Name="rectMask" Stroke="Black" VerticalAlignment="Top" Width="1280" Fill="Black" Canvas.Left="0" Canvas.Top="0" />
@@ -36,12 +36,12 @@
 
         <Storyboard x:Key="sbopening">
             <DoubleAnimation Storyboard.TargetName="rectMask" 
-          Storyboard.TargetProperty="Width" From="1280" To="0" 
+          Storyboard.TargetProperty="Height" From="800" To="0" 
           Duration="0:0:10" BeginTime="0:0:0"/>
         </Storyboard>
         <Storyboard x:Key="sbclosing">
             <DoubleAnimation Storyboard.TargetName="rectMask" 
-          Storyboard.TargetProperty="Width" From="0" To="1280" 
+          Storyboard.TargetProperty="Height" From="0" To="800" 
           Duration="0:0:10" BeginTime="0:0:0"/>
         </Storyboard>
     </Window.Resources>
