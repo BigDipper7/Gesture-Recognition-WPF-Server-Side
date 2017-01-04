@@ -56,9 +56,9 @@ namespace WpfApplicationTest
         {
             InitializeComponent();
 
-            //this.Topmost = true;
-            //this.Hide();
-            //this.Show();
+            this.Topmost = true;
+            this.Hide();
+            this.Show();
 
             refreshStoryBoard();
             Thread eneterThread = new Thread(new ThreadStart(runWebSocketServer));
