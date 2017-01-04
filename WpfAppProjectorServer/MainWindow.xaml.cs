@@ -48,9 +48,9 @@ namespace WpfApplicationTest
         private TimeSpan pauseTime;
 
         private SerialPort mySerialPort = null;
-        private const string GESTURE_CLOSE = "#CLSOING_10000#";
-        private const string GESTURE_OPEN = "#OPENING_10000#";
-        private const string GESTURE_STOP = "STOPPED";
+        private const string GESTURE_CLOSE = "#CLOSING_20#";
+        private const string GESTURE_OPEN = "#OPENING_20#";
+        private const string GESTURE_STOP = "#STOPPED#";
 
         public MainWindow()
         {
@@ -292,7 +292,7 @@ namespace WpfApplicationTest
             Console.WriteLine("Data Received:");
             Console.WriteLine(indata);
 
-            if (indata.Equals(GESTURE_OPEN) || indata.Equals(GESTURE_OPEN+GESTURE_STOP))
+            if (indata.Equals(GESTURE_OPEN))
             {
                 Console.WriteLine("[GESTURE] Simulate Open Action");
                 simulateOpenAction();
@@ -301,14 +301,14 @@ namespace WpfApplicationTest
             {
                 Console.WriteLine("data: " + indata);
             }
-            else if (indata.Equals(GESTURE_CLOSE) || indata.Equals(GESTURE_CLOSE + GESTURE_STOP))
+            else if (indata.Equals(GESTURE_CLOSE))
             {
                 Console.WriteLine("[GESTURE] Simulate Close Action");
                 simulateCloseAction();
             }
             else
             {
-                Console.WriteLine("data: " + indata);
+                Console.WriteLine("data: [" + indata+"]");
             }
         }
 
