@@ -52,6 +52,8 @@ namespace WpfApplicationTest
         private const string GESTURE_OPEN = "#OPENING_20#";
         private const string GESTURE_STOP = "#STOPPED#";
 
+        private MediaPlayer mediaPlayer = new MediaPlayer();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -66,7 +68,18 @@ namespace WpfApplicationTest
 
             Thread portThread = new Thread(new ThreadStart(initSerialPortInfo));
             portThread.Start();
+
+            mediaPlayer.Open(new Uri("d:/test.mp3", UriKind.Absolute));
+            mediaPlayer.MediaEnded += new EventHandler(Media_Ended);
+            //mediaPlayer.Play();
         }
+
+        private void Media_Ended(object sender, EventArgs e)
+        {
+            mediaPlayer.Position = TimeSpan.Zero;
+            mediaPlayer.Play();
+        }
+
 
         private void refreshStoryBoard() 
         {
@@ -77,8 +90,8 @@ namespace WpfApplicationTest
                 // Locate Storyboard resource
                 sbclosing = (Storyboard)TryFindResource("sbclosing");
 
-            sbclosing.Completed += (o, s) => { currentState = STATE_CLOSED; labelState.Content = currentState; };
-            sbopening.Completed += (o, s) => { currentState = STATE_OPENED; labelState.Content = currentState; };
+            sbclosing.Completed += (o, s) => { currentState = STATE_CLOSED; labelState.Content = currentState; mediaPlayer.Pause(); };
+            sbopening.Completed += (o, s) => { currentState = STATE_OPENED; labelState.Content = currentState; mediaPlayer.Pause(); };
         }
 
         public void simulateOpenAction()
@@ -117,6 +130,8 @@ namespace WpfApplicationTest
                         currentState = STATE_CLOSED;
                         sbclosing.Stop();
                         sbopening.Stop();
+                        mediaPlayer.Pause();
+                        mediaPlayer.Position = TimeSpan.Zero;
                     }
                     else if (EVENT_BTN_CLICK == EVENT_BTN_OPEN_CLICK)
                     { 
@@ -126,6 +141,8 @@ namespace WpfApplicationTest
                         //#Closed -> # Opening
                         sbclosing.Stop();
                         sbopening.Begin();
+                        mediaPlayer.Position = TimeSpan.Zero;
+                        mediaPlayer.Play();
                     }
                     break;
                 case STATE_CLOSING:
@@ -142,6 +159,8 @@ namespace WpfApplicationTest
                         //must record the timeSpan
                         pauseTime = sbclosing.GetCurrentTime();
                         beforePauseState = STATE_CLOSING;
+                        mediaPlayer.Pause();
+                        mediaPlayer.Position = TimeSpan.Zero;
                     }
                     break;
                 case STATE_OPENED:
@@ -154,6 +173,8 @@ namespace WpfApplicationTest
                         //#Opened -> Closing
                         sbopening.Stop();
                         sbclosing.Begin();
+                        mediaPlayer.Position = TimeSpan.Zero;
+                        mediaPlayer.Play();
                         log("curr inner end: " + currentState);
                     }
                     else if (EVENT_BTN_CLICK == EVENT_BTN_OPEN_CLICK)
@@ -172,6 +193,8 @@ namespace WpfApplicationTest
                         //must record the timeSpan
                         pauseTime = sbopening.GetCurrentTime();
                         beforePauseState = STATE_OPENING;
+                        mediaPlayer.Pause();
+                        mediaPlayer.Position = TimeSpan.Zero;
                     }
                     else if (EVENT_BTN_CLICK == EVENT_BTN_OPEN_CLICK)
                     {
@@ -191,6 +214,7 @@ namespace WpfApplicationTest
                             sbclosing.Seek(pauseTime, TimeSeekOrigin.BeginTime);
                         else
                             sbclosing.Seek(new TimeSpan(0, 0, 0, 10, 0).Subtract(pauseTime), TimeSeekOrigin.BeginTime);
+                        mediaPlayer.Play();
                     }
                     else if (EVENT_BTN_CLICK == EVENT_BTN_OPEN_CLICK)
                     {
@@ -205,6 +229,7 @@ namespace WpfApplicationTest
                         else
                             sbopening.Seek(new TimeSpan(0, 0, 0, 10, 0).Subtract(pauseTime), TimeSeekOrigin.BeginTime);
                         //sbopening.Seek(pauseTime, TimeSeekOrigin.BeginTime);
+                        mediaPlayer.Play();
                     }
                     break;
                 default:
